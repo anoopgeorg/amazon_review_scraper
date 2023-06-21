@@ -18,18 +18,9 @@ app = Flask(__name__)
 
 
 @app.route("/", methods = ['GET'])
+@cross_origin()
 def homepage():
     return render_template("index.html")
-
-# def logger(func):
-#     @functools.wraps(func)
-#     def wrapper_func(*args, **kwargs):
-#         logging.info(str(func.__name__) + "------->started")
-#         result = func(*args, **kwargs)
-#         logging.info(str(func.__name__) + "<-------ended")
-#         return result
-#     return wrapper_func()
-
 
 def get_product_links(prodCat):
     prod_links =[]
@@ -124,6 +115,7 @@ def connectMongo():
     return client     
 
 @app.route("/review" , methods = ['POST' , 'GET'])
+@cross_origin()
 def index():
     if request.method == 'POST':
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
@@ -171,74 +163,8 @@ def index():
         logging.info("log my final result {}".format(product_review_list))
         logging.shutdown()
         return render_template('result.html',reviews= product_review_list)
-
     else:
         return render_template('index.html')
-    #     try:
-    #         searchString = request.form['content'].replace(" ","")
-    #         search_url = "https://www.amazon.in/s?k=" + searchString
-    #         uClient = uReq(search_url)
-    #         flipkartPage = uClient.read()
-    #         uClient.close()
-    #         flipkart_html = bs(flipkartPage, "html.parser")
-    #         bigboxes = flipkart_html.findAll("div", {"class": "_1AtVbE col-12-12"})
-    #         del bigboxes[0:3]
-    #         box = bigboxes[0]
-    #         productLink = "https://www.flipkart.com" + box.div.div.div.a['href']
-    #         prodRes = requests.get(productLink)
-    #         prodRes.encoding='utf-8'
-    #         prod_html = bs(prodRes.text, "html.parser")
-    #         print(prod_html)
-    #         commentboxes = prod_html.find_all('div', {'class': "_16PBlm"})
-
-    #         filename = searchString + ".csv"
-    #         fw = open(filename, "w")
-    #         headers = "Product, Customer Name, Rating, Heading, Comment \n"
-    #         fw.write(headers)
-    #         reviews = []
-    #         for commentbox in commentboxes:
-    #             try:
-    #                 #name.encode(encoding='utf-8')
-    #                 name = commentbox.div.div.find_all('p', {'class': '_2sc7ZR _2V5EHH'})[0].text
-
-    #             except:
-    #                 logging.info("name")
-
-    #             try:
-    #                 #rating.encode(encoding='utf-8')
-    #                 rating = commentbox.div.div.div.div.text
-
-
-    #             except:
-    #                 rating = 'No Rating'
-    #                 logging.info("rating")
-
-    #             try:
-    #                 #commentHead.encode(encoding='utf-8')
-    #                 commentHead = commentbox.div.div.div.p.text
-
-    #             except:
-    #                 commentHead = 'No Comment Heading'
-    #                 logging.info(commentHead)
-    #             try:
-    #                 comtag = commentbox.div.div.find_all('div', {'class': ''})
-    #                 #custComment.encode(encoding='utf-8')
-    #                 custComment = comtag[0].div.text
-    #             except Exception as e:
-    #                 logging.info(e)
-
-    #             mydict = {"Product": searchString, "Name": name, "Rating": rating, "CommentHead": commentHead,
-    #                       "Comment": custComment}
-    #             reviews.append(mydict)
-    #         logging.info("log my final result {}".format(reviews))
-    #         return render_template('result.html', reviews=reviews[0:(len(reviews)-1)])
-    #     except Exception as e:
-    #         logging.info(e)
-    #         return 'something is wrong'
-    # # return render_template('results.html')
-
-    # else:
-    #     return render_template('index.html')
 
 
 if __name__=="__main__":
