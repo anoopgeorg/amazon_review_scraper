@@ -3,3 +3,8 @@ flask_cors
 requests
 bs4
 pymongo
+urllib
+logging
+functools
+time 
+
